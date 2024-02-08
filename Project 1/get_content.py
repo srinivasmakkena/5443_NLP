@@ -1,10 +1,9 @@
 import asyncio
-import os
 from pyppeteer import launch
 from bs4 import BeautifulSoup
+import csv
 
-current_location = os.path.dirname(os.path.abspath(__file__))
-
+# Defining the main asynchronous function to fetch the page content
 async def main(url=None):
     browser = await launch()
     page = await browser.newPage()
@@ -14,6 +13,7 @@ async def main(url=None):
     await browser.close()   
     return content
 
+# Function to get dynamic content from Amazon product review pages
 def get_dynamic_content(url):
     extracted_data = []
     page_count = 1
@@ -25,8 +25,8 @@ def get_dynamic_content(url):
             try:
                 content = asyncio.get_event_loop().run_until_complete(main(url))
                 flag = False
-            except:
-                print("Connection issue. Retrying...")
+            except Exception as ex:
+                print("Connection issue. Retrying...",ex.__str__)
 
         page_count += 1
         formatted_html = BeautifulSoup(content, 'html.parser')
@@ -57,16 +57,21 @@ def get_dynamic_content(url):
     print("completed Reading all comments..")
     return extracted_data
 
-url = "https://www.amazon.com/Samsung-Galaxy-S22-5G-Unlocked/product-reviews/B09VD33WHW/"
-content = get_dynamic_content(url)
+# URL of the Amazon product review page
+url = "https://www.amazon.com/Samsung-Galaxy-S22-5G-Unlocked/product-reviews/B09VD33WHW/" # correct URL
 
-# Write the extracted data to a CSV file
-import csv
+# url = "https://www.amazon.com/Samsung-Galaxy-S22-5G-Unlocked/dp/B09VD33WHW/"  #Wrong URL
+try:
+    content = get_dynamic_content(url)
+    
+    # Write the extracted data to a CSV file
+    fields = ['Review Text', 'Date', 'Rating', 'Person Name']
 
-fields = ['Review Text', 'Date', 'Rating', 'Person Name']
+    with open('result.csv', 'w', encoding="utf-8", newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=fields)
+        writer.writeheader()
+        for review_data in content:
+            writer.writerow(review_data)
 
-with open('result.csv', 'w', encoding="utf-8", newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=fields)
-    writer.writeheader()
-    for review_data in content:
-        writer.writerow(review_data)
+except:
+    print("Something is wrong with the url. Please provide correct product review page url in below format.\n https://www.amazon.com/product_name/product-reviews/Product_id/")

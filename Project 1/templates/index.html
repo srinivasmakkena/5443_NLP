@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Seniment Finder!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+         <!-- <form class="search-bar" method="POST">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="url" placeholder="Enter URL">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>  -->
+        {% if data %}
+            {% for entry in data %}
+                <div class="card">
+                    <h2 class="card-title">{{ entry.name }}</h2>
+                    <p class="card-text">Rating: {{ entry.rating }}</p>
+                    <p class="card-text">Date: {{ entry.date }}</p>
+                    <p class="card-text">Sentiment: {{ entry.sentiment }}</p>
+                    <p class="card-text">Sentiment Confidence: {{ entry.sentiment_confidence }}</p>
+                    <p class="card-text">{{ entry.comment }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>
