@@ -28,28 +28,114 @@
             padding: 10px;
             margin-bottom: 10px;
         }
+        .progress-bar {
+            height: 20px;
+        }
+        
     </style>
 </head>
 <body>
     <div class="container">
-         <!-- <form class="search-bar" method="POST">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" name="url" placeholder="Enter URL">
-                <button class="btn btn-primary" type="submit">Search</button>
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 style="text-align:center">Overall Sentiment Analysis</h3>
+                <canvas id="sentimentChart" style="width:700px"></canvas>
             </div>
-        </form>  -->
-        {% if data %}
-            {% for entry in data %}
-                <div class="card">
-                    <h2 class="card-title">{{ entry.name }}</h2>
-                    <p class="card-text">Rating: {{ entry.rating }}</p>
-                    <p class="card-text">Date: {{ entry.date }}</p>
-                    <p class="card-text">Sentiment: {{ entry.sentiment }}</p>
-                    <p class="card-text">Sentiment Confidence: {{ entry.sentiment_confidence }}</p>
-                    <p class="card-text">{{ entry.comment }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
+        </div>
+        
+        <!-- First vertical section -->
+        <div class="row">
+            <div class="col-md-6">
+                <!-- <img src="path_to_image" alt="Image 1"> -->
+                <h3>Summary 1</h3>
+                <p class="card-text">{{ summary1 }}</p>
+                {% if data1 %}
+                    {% for entry in data1 %}
+                        <div class="card" style="background-color: {% if entry.sentiment == 'Negative' %}rgba(255, 0, 0, 0.1){% elif entry.sentiment == 'Neutral' %}rgba(255, 255, 0, 0.1){% else %}rgba(0, 128, 0, 0.1){% endif %};">
+                            <h2 class="card-title">{{ entry.name }}</h2>
+                            <p class="card-text">Rating: {{ entry.rating }}</p>
+                            <p class="card-text">Date: {{ entry.date }}</p>
+                            <p class="card-text">Sentiment: {{ entry.sentiment }}</p>
+                            <p class="card-text">Sentiment Scores: {{ entry.Scores }}</p>
+                            <p class="card-text">{{ entry.comment }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <!-- Second vertical section -->
+            <div class="col-md-6">
+                <!-- <img src="path_to_image" alt="Image 2"> -->
+                <h3>Summary 2</h3>
+                <p class="card-text">{{ summary2 }}</p>
+                {% if data2 %}
+                    {% for entry in data2 %}
+                        <div class="card" style="background-color: {% if entry.sentiment == 'Negative' %}rgba(255, 0, 0, 0.1){% elif entry.sentiment == 'Neutral' %}rgba(255, 255, 0, 0.1){% else %}rgba(0, 128, 0, 0.1){% endif %};">
+                            <h2 class="card-title">{{ entry.name }}</h2>
+                            <p class="card-text">Rating: {{ entry.rating }}</p>
+                            <p class="card-text">Date: {{ entry.date }}</p>
+                            <p class="card-text">Sentiment: {{ entry.sentiment }}</p>
+                            <p class="card-text">Sentiment Scores: {{ entry.Scores }}</p>
+                            <p class="card-text">{{ entry.comment }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+     
     </div>
-</body>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+
+    <!-- Script to generate sentiment analysis graph -->
+   <!-- Script to generate sentiment analysis graph for Product 1 -->
+   <script>var ctx = document.getElementById('sentimentChart').getContext('2d');
+    var barWidth = 0.35; // Adjust the bar width to make space for both datasets
+    
+    var sentimentData = {
+        labels: ["Negative", "Neutral", "Positive"],
+        datasets: [
+            {
+                label: 'Product 1',
+                data: [
+                    {{ sentiment_distribution1['Negative'] }},
+                    {{ sentiment_distribution1['Neutral'] }},
+                    {{ sentiment_distribution1['Positive'] }}
+                ],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                barPercentage: barWidth,
+                categoryPercentage: 0.5 // Adjust the spacing between bars
+            },
+            {
+                label: 'Product 2',
+                data: [
+                    {{ sentiment_distribution2['Negative'] }},
+                    {{ sentiment_distribution2['Neutral'] }},
+                    {{ sentiment_distribution2['Positive'] }}
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                barPercentage: barWidth,
+                categoryPercentage: 0.5 // Adjust the spacing between bars
+            }
+        ]
+    };
+    
+    var sentimentChart = new Chart(ctx, {
+        type: 'bar',
+        data: sentimentData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+</script></body>
 </html>

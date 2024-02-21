@@ -1,2 +1,8 @@
 beautifulsoup4==4.12.3
-pyppeteer==1.0.2
+Flask==3.0.2
+pyppeteer==2.0.0
+Requests==2.31.0
+scipy==1.12.0
+sumy==0.11.0
+textblob==0.17.1
+transformers==4.37.2
