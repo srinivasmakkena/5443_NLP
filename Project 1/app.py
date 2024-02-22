@@ -17,8 +17,8 @@ labels = ['Negative', 'Neutral', 'Positive']
 summarization = pipeline("summarization")
 
 def analyze_sentiment(review_text):
-    encoded_tweet = tokenizer(review_text, return_tensors='pt', padding='max_length', truncation=True, max_length=512)
-    output = model(**encoded_tweet)
+    encoded_text = tokenizer(review_text, return_tensors='pt', padding='max_length', truncation=True, max_length=512)
+    output = model(**encoded_text)
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
     sentiment = labels[scores.argmax()]
